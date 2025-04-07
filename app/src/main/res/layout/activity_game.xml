@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="0dp">
+
+    <!-- 🧭 App Bar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#645394"
+        android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+        android:titleTextColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/top_app_bar_menu"
+        app:navigationIcon="@drawable/ic_back" />
+
+    <!-- 📝 Título centrado manualmente -->
+    <TextView
+        android:id="@+id/appBarTitle"
+        style="?attr/textAppearanceHeadline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TeleMemo"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/topAppBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/topAppBar" />
+
+
+    <!-- 🎮 Botón para iniciar el juego -->
+    <Button
+        android:id="@+id/btnJugar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="24dp"
+        android:text="Jugar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gridLayout" />
+
+
+    <!-- 🟦 Grid de botones -->
+    <GridLayout
+        android:id="@+id/gridLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alignmentMode="alignMargins"
+        android:columnCount="3"
+        android:rowCount="4"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="5dp"
+        android:useDefaultMargins="true"
+        app:layout_constraintBottom_toTopOf="@id/btnJugar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topAppBar">
+
+        <!-- 📦 12 botones con estilo WordButton -->
+        <Button
+            android:id="@+id/btn0"
+            style="@style/WordButton"
+            android:text="1" />
+
+        <Button
+            android:id="@+id/btn1"
+            style="@style/WordButton"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:text="2" />
+
+        <Button
+            android:id="@+id/btn2"
+            style="@style/WordButton"
+            android:text="3" />
+
+        <Button
+            android:id="@+id/btn3"
+            style="@style/WordButton"
+            android:text="4" />
+
+        <Button
+            android:id="@+id/btn4"
+            style="@style/WordButton"
+            android:text="5" />
+
+        <Button
+            android:id="@+id/btn5"
+            style="@style/WordButton"
+            android:text="6" />
+
+        <Button
+            android:id="@+id/btn6"
+            style="@style/WordButton"
+            android:text="7" />
+
+        <Button
+            android:id="@+id/btn7"
+            style="@style/WordButton"
+            android:text="8" />
+
+        <Button
+            android:id="@+id/btn8"
+            style="@style/WordButton"
+            android:text="9" />
+
+        <Button
+            android:id="@+id/btn9"
+            style="@style/WordButton"
+            android:text="10" />
+
+        <Button
+            android:id="@+id/btn10"
+            style="@style/WordButton"
+            android:text="11" />
+
+        <Button
+            android:id="@+id/btn11"
+            style="@style/WordButton"
+            android:text="12" />
+
+    </GridLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

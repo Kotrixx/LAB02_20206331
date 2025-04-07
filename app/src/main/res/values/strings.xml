@@ -6,4 +6,6 @@
     <string name="cybersecurity_option">Ciberseguridad</string>
     <string name="software_option">Software</string>
     <string name="title">APPSIoT - Lab 2</string>
+    <string name="estad_sticas">Estadísticas</string>
+    <string name="telememo">TeleMemo</string>
 </resources>
