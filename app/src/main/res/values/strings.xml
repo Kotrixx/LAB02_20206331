@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">lab02_20206331</string>
+    <string name="logo_description">Logo de la aplicación</string>
+    <string name="bienvenido">Bienvenido</string>
+    <string name="optical_option">Ópticas</string>
+    <string name="cybersecurity_option">Ciberseguridad</string>
+    <string name="software_option">Software</string>
+    <string name="title">APPSIoT - Lab 2</string>
 </resources>
