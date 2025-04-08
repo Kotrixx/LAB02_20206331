@@ -7,5 +7,6 @@
     <string name="software_option">Software</string>
     <string name="title">APPSIoT - Lab 2</string>
     <string name="estad_sticas">Estadísticas</string>
-    <string name="telememo">TeleMemo</string>
+    <string name="appBarTitle">TeleMemo</string>
+    <string name="playButton">Jugar</string>
 </resources>

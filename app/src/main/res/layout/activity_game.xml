@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:padding="0dp">
 
-    <!-- 🧭 App Bar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/topAppBar"
         android:layout_width="match_parent"
@@ -20,13 +19,12 @@
         app:menu="@menu/top_app_bar_menu"
         app:navigationIcon="@drawable/ic_back" />
 
-    <!-- 📝 Título centrado manualmente -->
     <TextView
         android:id="@+id/appBarTitle"
         style="?attr/textAppearanceHeadline6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TeleMemo"
+        android:text="@string/appBarTitle"
         android:textColor="@android:color/black"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/topAppBar"
@@ -35,21 +33,19 @@
         app:layout_constraintTop_toTopOf="@id/topAppBar" />
 
 
-    <!-- 🎮 Botón para iniciar el juego -->
     <Button
         android:id="@+id/btnJugar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="36dp"
-        android:text="Jugar"
+        android:text="@string/playButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/gridLayout" />
 
 
-    <!-- 🟦 Grid de botones -->
     <GridLayout
         android:id="@+id/gridLayout"
         android:layout_width="0dp"
@@ -65,7 +61,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topAppBar">
 
-        <!-- 📦 12 botones con estilo WordButton -->
         <Button
             android:id="@+id/btn0"
             style="@style/WordButton"
@@ -129,6 +124,5 @@
             android:text="12" />
 
     </GridLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
