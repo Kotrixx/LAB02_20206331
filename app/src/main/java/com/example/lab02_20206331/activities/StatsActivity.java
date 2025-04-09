@@ -1,6 +1,5 @@
 package com.example.lab02_20206331.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -11,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.lab02_20206331.R;
 import com.example.lab02_20206331.utils.StorageHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StatsActivity extends AppCompatActivity {
@@ -26,16 +26,38 @@ public class StatsActivity extends AppCompatActivity {
         resultsListView = findViewById(R.id.resultsListView);
         newGameButton = findViewById(R.id.btnNewGame);
 
+        // Obtener los resultados guardados
         List<String> results = StorageHelper.getAllResults(this);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, results);
+        List<String> formattedResults = formatResults(results);
 
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, formattedResults);
         resultsListView.setAdapter(adapter);
 
         newGameButton.setOnClickListener(v -> {
-            startActivity(new Intent(this, MainActivity.class));
+            // Volver a la pantalla de inicio
             finish();
         });
+    }
+
+    private List<String> formatResults(List<String> results) {
+        List<String> formattedResults = new ArrayList<>();
+        int gameNumber = 1;
+        for (String result : results) {
+            String[] parts = result.split(",");
+            String outcome = parts[0];
+            String time = parts[1];
+            String attempts = parts.length > 2 ? "Intentos: " + parts[2] : "";
+
+            String formatted = "Juego " + gameNumber + ": " + outcome + " / " + time;
+            if (!attempts.isEmpty()) {
+                formatted += "\n" + attempts;
+            }
+
+            formattedResults.add(formatted);
+            gameNumber++;
+        }
+        return formattedResults;
     }
 }

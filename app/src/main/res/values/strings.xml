@@ -9,4 +9,5 @@
     <string name="estad_sticas">Estadísticas</string>
     <string name="appBarTitle">TeleMemo</string>
     <string name="playButton">Jugar</string>
+    <string name="attemptsText">Te quedan 3 intentos</string>
 </resources>

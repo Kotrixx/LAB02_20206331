@@ -1,26 +1,31 @@
 package com.example.lab02_20206331.models;
 
 public class GameResult {
-    public String outcome; // Ganó / Perdió / Cancelado
-    public String topic;
-    public int timeInSeconds;
-    public int attempts;
+    private String outcome;
+    private String topic;
+    private int time;
+    private int attempts;
 
-    public GameResult(String outcome, String topic, int timeInSeconds, int attempts) {
+    public GameResult(String outcome, String topic, int time, int attempts) {
         this.outcome = outcome;
         this.topic = topic;
-        this.timeInSeconds = timeInSeconds;
+        this.time = time;
         this.attempts = attempts;
     }
 
-    @Override
-    public String toString() {
-        if (outcome.equals("Cancelado")) {
-            return "Cancelado | Tema: " + topic;
-        } else if (outcome.equals("Ganó")) {
-            return "Ganó | Tema: " + topic + " | Tiempo: " + timeInSeconds + "s | Intentos: " + attempts;
-        } else {
-            return "Perdió | Tema: " + topic + " | Tiempo: " + timeInSeconds + "s";
-        }
+    public String getOutcome() {
+        return outcome;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public int getAttempts() {
+        return attempts;
     }
 }

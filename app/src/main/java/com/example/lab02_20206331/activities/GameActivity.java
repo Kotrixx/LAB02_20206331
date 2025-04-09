@@ -35,12 +35,22 @@ public class GameActivity extends AppCompatActivity {
 
     private String selectedPhrase;
     private String topic;
-    private int selectedIndex = 0;
+
+    private Button playButton;
+    private TextView attemptsTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        playButton = findViewById(R.id.btnJugar);
+        attemptsTextView = findViewById(R.id.attemptsText);
+
+
+        // Inicializa el botón de "Jugar"
+        playButton.setText("Jugar");
+
 
         MaterialToolbar toolbar = findViewById(R.id.topAppBar);
         toolbar.setNavigationOnClickListener(v -> {
@@ -57,14 +67,41 @@ public class GameActivity extends AppCompatActivity {
         });
 
         topic = getIntent().getStringExtra("topic");
-        startTime = SystemClock.elapsedRealtime();
 
+        // Cuando presionan "Jugar"
+        playButton.setOnClickListener(v -> startGame());  // Inicia el juego al presionar "Jugar"
+    }
+
+    private void startGame() {
+        playButton.setText("Nuevo Juego");
+        playButton.setOnClickListener(v -> restartGame());  // Cambia la funcionalidad al presionar "Nuevo Juego"
+
+        startTime = SystemClock.elapsedRealtime();
         selectedPhrase = getRandomPhrase(topic);
         correctWords = selectedPhrase.split(" ");
         mixedWords = prepareShuffledWords(correctWords);
 
+        // Inicializa los botones
         setupButtons();
+
+        // Al principio no mostramos los intentos
+        attemptsTextView.setVisibility(TextView.GONE);  // Oculta el TextView hasta que empiece el juego
     }
+
+    private void restartGame() {
+        attempts = 0;
+        attemptsTextView.setVisibility(TextView.VISIBLE);  // Mostrar el contador de intentos al reiniciar el juego
+        attemptsTextView.setText("Te quedan 3 intentos");
+
+        selectedButtons.clear();
+        selectedWords.clear();
+        currentWordIndex = 0;
+        buttons.clear();
+
+        // Reiniciar el flujo de juego
+        startGame();  // Llama nuevamente a `startGame` para reiniciar el flujo
+    }
+
 
     private void setupButtons() {
         for (int i = 0; i < TOTAL_WORDS; i++) {
@@ -72,49 +109,69 @@ public class GameActivity extends AppCompatActivity {
             Button btn = findViewById(resId);
             buttons.add(btn);
 
-            String word = mixedWords.get(i);
-            btn.setText(word);
-            btn.setEnabled(!word.isEmpty());
+            // Inicialmente las palabras estarán ocultas
+            btn.setText(""); // Botón vacío inicialmente
+            btn.setEnabled(true); // El botón puede ser tocado
 
-            btn.setOnClickListener(v -> handleWordSelection(btn));
+            final int finalIndex = i; // Necesario para el OnClickListener
+            btn.setOnClickListener(v -> handleWordSelection(btn, finalIndex));
         }
     }
 
-    private void handleWordSelection(Button btn) {
-        String word = btn.getText().toString();
+    private void handleWordSelection(Button btn, int buttonIndex) {
+        String word = mixedWords.get(buttonIndex);
 
-        if (word.equals(correctWords[selectedIndex])) {
-            btn.setEnabled(false);
+        // Muestra la palabra seleccionada aunque sea incorrecta
+        btn.setText(word);  // Muestra la palabra seleccionada temporalmente
+
+        // Si la palabra seleccionada es correcta
+        if (word.equals(correctWords[currentWordIndex])) {
+            btn.setEnabled(false);  // Deshabilita el botón si es correcta
             selectedButtons.add(btn);
-            selectedIndex++;
-            if (selectedIndex == correctWords.length) {
+            selectedWords.add(word);
+            currentWordIndex++;
+
+            if (currentWordIndex == correctWords.length) {
                 long elapsed = (SystemClock.elapsedRealtime() - startTime) / 1000;
-                showResult("Ganaste 🎉", elapsed, attempts);
-                saveResult("Ganó", (int) elapsed);
+                attemptsTextView.setText(String.format("Ganaste / Terminó en %ds", elapsed));
+                // showResult("Ganaste", elapsed, attempts);
+                saveResult("Ganó %d", (int) elapsed);
             }
 
         } else {
-            attempts++;
-            Toast.makeText(this, "Incorrecto. Intentos restantes: " + (MAX_ATTEMPTS - attempts), Toast.LENGTH_SHORT).show();
-            resetSelection();
+            // Palabra es incorrecta
+            attempts++; // Incrementa el contador de intentos
+            attemptsTextView.setVisibility(TextView.VISIBLE);  // Asegurarse de que el contador de intentos esté visible
+            attemptsTextView.setText("Te quedan " + (MAX_ATTEMPTS - attempts) + " intentos");
 
+            // Restablecer la selección después de un error
+            // Toast.makeText(this, "Incorrecto. Intentos restantes: " + (MAX_ATTEMPTS - attempts), Toast.LENGTH_SHORT).show();
+            resetSelection(); // Restablece las palabras seleccionadas
+
+            // Agotar los intentos
             if (attempts >= MAX_ATTEMPTS) {
                 long elapsed = (SystemClock.elapsedRealtime() - startTime) / 1000;
-                showResult("Perdiste 😞", elapsed, attempts);
-                saveResult("Perdió", (int) elapsed);
+                attemptsTextView.setText(String.format("Perdiste / Terminó en %ds", elapsed));
+
+                // showResult("Perdiste", elapsed, attempts);
+                saveResult("Perdió %d", (int) elapsed);
             }
         }
     }
 
 
+
     private void resetSelection() {
-        selectedIndex = 0;
-        for (Button btn : selectedButtons) {
-            btn.setEnabled(true); // Reactiva
+        // Si el jugador se equivoca se deshacen las selecciones anteriores
+        currentWordIndex = 0;
+        // Ocultar nuevamente
+        for (Button b : selectedButtons) {
+            b.setText("");  // Borra el texto
+            b.setEnabled(true);
         }
         selectedButtons.clear();
+        selectedWords.clear();
     }
-
 
     private void showResult(String message, long time, int attemptsUsed) {
         String finalMsg = message + "\nTiempo: " + time + "s";
@@ -122,19 +179,21 @@ public class GameActivity extends AppCompatActivity {
             finalMsg += "\nIntentos usados: " + attemptsUsed;
         }
 
+        // Muestra el resultado antes de finalizar la actividad
         Toast.makeText(this, finalMsg, Toast.LENGTH_LONG).show();
 
-        // Después de 2 segundos, regresar a inicio
+        // Llama a finish() después de mostrar el resultado
         new android.os.Handler().postDelayed(() -> {
             Intent intent = new Intent(GameActivity.this, MainActivity.class);
             startActivity(intent);
-            finish();
+            finish();  // Aquí es donde terminamos la actividad de manera segura
         }, 3000);
     }
 
+
     private List<String> prepareShuffledWords(String[] words) {
         List<String> wordList = new ArrayList<>(Arrays.asList(words));
-        while (wordList.size() < TOTAL_WORDS) wordList.add("");
+        while (wordList.size() < TOTAL_WORDS) wordList.add(""); // Agrega palabras vacías si hay menos de 12
         Collections.shuffle(wordList);
         return wordList;
     }
@@ -160,6 +219,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void saveResult(String outcome, int time) {
         GameResult result = new GameResult(outcome, topic, time, attempts);
-        StorageHelper.saveResult(this, result);
+        StorageHelper.saveResult(this, result);  // Guardar el resultado en SharedPreferences o base de datos
     }
+
 }
